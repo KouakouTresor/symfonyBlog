@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraint as Assert; //validation, pattern
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
@@ -24,11 +24,13 @@ class Article
 
     /**
      * @ORM\Column(type="text")
+     * Assert\length(min=5, max=255)
      */
     private $content;
 
     /**
      * @ORM\Column(type="text")
+     * Assert\Url
      */
     private $image;
 
