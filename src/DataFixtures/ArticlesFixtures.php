@@ -5,23 +5,52 @@ namespace App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Article;
+use App\Entity\Category;
+use App\Entity\Comment;
+use Faker;
 
 class ArticlesFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
-        for($i = 0; $i <= 10; $i++){
-            $article = new Article();
-            $article->setTitle("Titre de l'article n°$i")
-                    ->setContent("<p>Contenu de l'artitle n°$i</p>")
-                    ->setImage("http://placehold.it/350X150")
-                    ->setCreatedAt(new \DateTime());
+        $faker = Faker\Factory::create('fr_FR');
+        
+       
+        for($i = 1; $i <= 3; $i++){
+            $category = new Category();
+            $category->setTitle($faker->sentence())
+                     ->setDescription($faker->paragraph());
 
-                    $manager->persist($article);
+            $manager->persist($category);
 
+          
+            for($j = 0; $j <= mt_rand(4,6); $j++){
+                $article = new Article();
 
+                
+                $article->setTitle($faker->sentence())
+                        ->setContent($faker->paragraph())
+                        ->setImage($faker->imageUrl())
+                        ->setCreatedAt($faker->dateTimeBetween('-6 month'))
+                        ->setCategory($category);
+    
+                        $manager->persist($article);
+    
+                for($k = 1; $k <= mt_rand(4,10); $k++){
+                    $comment = new Comment();
 
+                    $comment->setAuthor($faker->name)
+                            ->setContent($faker->paragraph())
+                            ->setCreatedAt($faker->dateTimeBetween('-6 month'))
+                            ->setArticle($article);
+
+                    $manager->persist($comment);
+                }
+    
+            }
         }
+
+       
 
         $manager->flush();
     }

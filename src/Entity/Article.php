@@ -31,7 +31,7 @@ class Article
     private $content;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="string")
      * Assert\Url
      */
     private $image;
